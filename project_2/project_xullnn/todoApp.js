@@ -495,3 +495,23 @@ test("todoManager list completed todos by year and month combination", function(
 
   return test1 && test2;
 });
+
+// revision update -------------------------------------------------------
+
+Todo.prototype.isWithinMonthYear = function(month, year) {
+  return this.month === month && this.year === year;
+};
+
+test("isWithinMonthYear returns true only both year and month are matched", function() {
+  let todo1 = new Todo({title: 'Another todo', description: 'fast for 48h', month: '1', year: '9999'});
+  let todo2 = new Todo({title: 'Another todo', description: 'fast for 48h', month: '', year: ''});
+  let currentYear = (new Date()).getFullYear();
+  let currentMonth = (new Date()).getMonth() + 1;
+
+  let testFalse1 = todo1.isWithinMonthYear('2', '9999') === false;
+  let testFalse2 = todo2.isWithinMonthYear('2', '9999') === false;
+  let testTrue1 = todo1.isWithinMonthYear('1', '9999') === true;
+  let testTrue2 = todo2.isWithinMonthYear(String(currentMonth), String(currentYear)) === true;
+
+  return testFalse1 && testFalse2 && testTrue1 && testTrue2;
+});
